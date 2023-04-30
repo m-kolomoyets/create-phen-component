@@ -89,6 +89,6 @@ const { clear, debug } = flags;
 	}
 
 	log(
-		'Invalid arguments. \nExample: create-phen-component {component-name} {optional: --with-story}'
+		'Invalid arguments. \nExample: create-phen-component {component-name} {optional: --story}'
 	);
 })();
