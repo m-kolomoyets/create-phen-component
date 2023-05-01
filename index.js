@@ -8,11 +8,12 @@
  */
 
 const fs = require('fs');
+const chalk = require('chalk');
 
 const init = require('./utils/init');
 const cli = require('./utils/cli');
 const log = require('./utils/log');
-const { createFinalFile } = require('./utils/utils');
+const { createFinalFile, logWarning, logError } = require('./utils/utils');
 
 const input = cli.input;
 const flags = cli.flags;
@@ -25,61 +26,74 @@ const { clear, debug } = flags;
 
 	if (input) {
 		if (input.length !== 1) {
-			log(
-				'Invalid arguments. \nExample: create-phen-component {component-name} {optional: --story}'
+			logError(
+				`Invalid arguments. \n${chalk.red
+					.bgHex('#000000')
+					.bold(
+						'Example: create-phen-component {component-name} {optional: --story}'
+					)}`
 			);
 			return;
 		}
 
 		const componentName = input[0];
 
+		logWarning(
+			`Creating ${chalk.black.bgYellowBright(
+				componentName
+			)} component folder`
+		);
+
 		const folderPath = `${__dirname}/${componentName}`;
 
 		try {
-			if (!fs.existsSync(folderPath)) {
-				await fs.mkdir(folderPath, {}, error => {
-					if (error) {
-						log(error);
-						throw new Error(error);
-					}
-				});
+			if (fs.existsSync(folderPath)) {
+				logError(`${componentName} folder already exists!`);
+				return;
+			}
 
-				await createFinalFile(
-					'COMPONENT_NAME.tsx',
-					folderPath,
-					componentName,
-					`${componentName}.tsx`
-				);
-
-				await createFinalFile(
-					'COMPONENT_NAME.module.css',
-					folderPath,
-					componentName,
-					`${componentName}.module.css`
-				);
-
-				await createFinalFile(
-					'types.ts',
-					folderPath,
-					componentName,
-					'types.ts'
-				);
-
-				await createFinalFile(
-					'index.ts',
-					folderPath,
-					componentName,
-					'index.ts'
-				);
-
-				if (cli.flags?.story) {
-					await createFinalFile(
-						'COMPONENT_NAME.stories.tsx',
-						folderPath,
-						componentName,
-						`${componentName}.stories.tsx`
-					);
+			await fs.mkdir(folderPath, {}, error => {
+				if (error) {
+					log(error);
+					throw new Error(error);
 				}
+			});
+
+			await createFinalFile(
+				'COMPONENT_NAME.tsx',
+				folderPath,
+				componentName,
+				`${componentName}.tsx`
+			);
+
+			await createFinalFile(
+				'COMPONENT_NAME.module.css',
+				folderPath,
+				componentName,
+				`${componentName}.module.css`
+			);
+
+			await createFinalFile(
+				'types.ts',
+				folderPath,
+				componentName,
+				'types.ts'
+			);
+
+			await createFinalFile(
+				'index.ts',
+				folderPath,
+				componentName,
+				'index.ts'
+			);
+
+			if (cli.flags?.story) {
+				await createFinalFile(
+					'COMPONENT_NAME.stories.tsx',
+					folderPath,
+					componentName,
+					`${componentName}.stories.tsx`
+				);
 			}
 		} catch (err) {
 			console.error(err);
