@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
+const prettier = require('prettier');
 
 const logSuccess = message => {
 	console.log(chalk.green(message));
@@ -30,6 +31,33 @@ const createFile = (fileLocation, fileContent) => {
 	});
 };
 
+const buildPrettier = () => {
+	const config = {
+		parser: 'babel',
+		printWidth: 120,
+		proseWrap: 'never',
+		arrowParens: 'always',
+		endOfLine: 'lf',
+		trailingComma: 'es5',
+		tabWidth: 4,
+		singleQuote: true,
+		overrides: [
+			{
+				files: ['**/*.css', '**/*.html', '**/*.svg'],
+				options: {
+					singleQuote: false
+				}
+			}
+		]
+	};
+
+	return text => {
+		return prettier.format(text, config);
+	};
+};
+
+const prettify = buildPrettier();
+
 const readFileRelative = fileLocation => {
 	return readFile(path.join(__dirname, fileLocation));
 };
@@ -47,11 +75,16 @@ const createFinalFile = async (
 
 		const content = template.replaceAll(/COMPONENT_NAME/g, componentName);
 
-		await createFile(`${folderPath}/${resultFileName}`, content);
+		const formattedContent = resultFileName
+			?.split('.')
+			.reverse()[0]
+			.includes('css')
+			? content
+			: prettify(content);
 
-		logSuccess(
-			`File ${chalk.black.bgGreenBright(resultFileName)} was created!`
-		);
+		await createFile(`${folderPath}/${resultFileName}`, formattedContent);
+
+		logSuccess(`✓ ${chalk.black.bgGreenBright(resultFileName)}`);
 	} catch (err) {
 		console.error(err);
 	}
