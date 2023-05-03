@@ -5,7 +5,7 @@ import COMPONENT_NAME from './COMPONENT_NAME';
 const meta = {
 	title: 'ui/COMPONENT_NAME',
 	component: COMPONENT_NAME,
-	tags: ['autodocs']
+	tags: ['autodocs'],
 } satisfies Meta<typeof COMPONENT_NAME>;
 
 export default meta;
@@ -13,5 +13,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Base: Story = {
-	args: {} as COMPONENT_NAMEProps
+	args: {} as COMPONENT_NAMEProps,
 };

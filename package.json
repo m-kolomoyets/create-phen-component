@@ -1,7 +1,7 @@
 {
 	"name": "create-phen-component",
 	"description": "Creates React components based on Phenomenon.Studio code style",
-	"version": "0.3.7",
+	"version": "0.4.7",
 	"license": "UNLICENSED",
 	"bin": {
 		"create-phen-component": "index.js"

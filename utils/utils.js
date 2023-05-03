@@ -37,18 +37,18 @@ const buildPrettier = () => {
 		printWidth: 120,
 		proseWrap: 'never',
 		arrowParens: 'always',
+		trailingComma: 'es5',
 		endOfLine: 'lf',
-		// trailingComma: 'es5',
 		tabWidth: 4,
 		singleQuote: true,
 		overrides: [
 			{
 				files: ['**/*.css', '**/*.html', '**/*.svg'],
 				options: {
-					singleQuote: false
-				}
-			}
-		]
+					singleQuote: false,
+				},
+			},
+		],
 	};
 
 	return text => {
@@ -75,12 +75,13 @@ const createFinalFile = async (
 
 		const content = template.replaceAll(/COMPONENT_NAME/g, componentName);
 
-		const formattedContent = resultFileName
-			?.split('.')
-			.reverse()[0]
-			.includes('css')
-			? content
-			: prettify(content);
+		// const formattedContent = ['css', 'stories'].includes(
+		// 	resultFileName?.split('.').reverse()[0]
+		// )
+		// 	? content
+		// 	: prettify(content);
+
+		const formattedContent = content;
 
 		await createFile(`${folderPath}/${resultFileName}`, formattedContent);
 
@@ -97,5 +98,5 @@ module.exports = {
 	createFinalFile,
 	logSuccess,
 	logError,
-	logWarning
+	logWarning,
 };
