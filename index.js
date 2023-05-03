@@ -44,7 +44,7 @@ const { clear, debug } = flags;
 			)} component folder`
 		);
 
-		const folderPath = `${__dirname}/${componentName}`;
+		const folderPath = `${process.cwd()}/${componentName}`;
 
 		console.log('FOLDER_PATH:', folderPath);
 
