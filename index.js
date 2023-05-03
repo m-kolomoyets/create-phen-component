@@ -46,6 +46,8 @@ const { clear, debug } = flags;
 
 		const folderPath = `${__dirname}/${componentName}`;
 
+		console.log('FOLDER_PATH:', folderPath);
+
 		try {
 			if (fs.existsSync(folderPath)) {
 				logError(`${componentName} folder already exists!`);
